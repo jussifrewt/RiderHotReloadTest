@@ -5,8 +5,6 @@ namespace RiderHotReloadTest.Pages;
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
-
-    // ВОТ ЭТА СТРОЧКА
     public string Message { get; private set; } = string.Empty;
 
     public IndexModel(ILogger<IndexModel> logger)
@@ -16,7 +14,6 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        // И ВОТ ЭТА СТРОЧКА
-        Message = "Это изначальная логика.";
+        Message = "This is the initial logic.";
     }
 }
