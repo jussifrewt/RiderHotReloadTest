@@ -1,0 +1,39 @@
+@page
+@model AdvancedModel
+@{
+    ViewData["Title"] = "Advanced Tests";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Advanced Hot Reload Tests</h1>
+</div>
+<hr />
+
+<h3>Async Task Test</h3>
+<p>@Model.AsyncMessage</p>
+
+<hr />
+
+<h3>LINQ Query Test</h3>
+<p>The query filters countries starting with the letter 'A'.</p>
+<ul>
+    @foreach (var item in Model.FilteredData)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+<hr />
+
+<h3>UI State Preservation Test</h3>
+<form method="post">
+    <div class="form-group mb-3">
+        <label for="userName" class="form-label">Enter some text below:</label>
+        <input type="text" id="userName" class="form-control" placeholder="This text should not disappear" />
+    </div>
+    <p><small>Now, go to the C# code, make a change, and apply Hot Reload. The text you entered above should remain.</small></p>
+</form>
+<hr />
+
+<h3>Dependency Injection Test</h3>
+<p>@Model.ServiceMessage</p>
