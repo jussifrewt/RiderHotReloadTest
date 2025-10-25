@@ -1,0 +1,26 @@
+From 5243dd2604ce27f9b17a80e400181df8749c7dae Mon Sep 17 00:00:00 2001
+From: Natalia Baliakina <natalia.baliakina@fxbackoffice.com>
+Date: Sat, 25 Oct 2025 21:06:09 +0300
+Subject: [PATCH 1/5] test: Demonstrate basic UI Hot Reload
+
+---
+ Pages/Index.cshtml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Pages/Index.cshtml b/Pages/Index.cshtml
+index 059c608..1cc9979 100644
+--- a/Pages/Index.cshtml
++++ b/Pages/Index.cshtml
+@@ -5,7 +5,7 @@
+ }
+ 
+ <div class="text-center">
+-    <h1 class="display-4">Welcome!</h1>
++    <h1 class="display-4">UI Hot Reload is working!</h1>
+     <p>@Model.Message</p> 
+     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+ </div>
+\ No newline at end of file
+-- 
+2.50.1
+

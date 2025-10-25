@@ -1,0 +1,25 @@
+From a5a6e3e32aeb6f9e12da81d8a70ceb2b634f63da Mon Sep 17 00:00:00 2001
+From: Natalia Baliakina <natalia.baliakina@fxbackoffice.com>
+Date: Sat, 25 Oct 2025 21:07:02 +0300
+Subject: [PATCH 2/5] test: Demonstrate basic Logic Hot Reload
+
+---
+ Pages/Index.cshtml.cs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Pages/Index.cshtml.cs b/Pages/Index.cshtml.cs
+index 3605180..f46f6f0 100644
+--- a/Pages/Index.cshtml.cs
++++ b/Pages/Index.cshtml.cs
+@@ -14,6 +14,6 @@ public class IndexModel : PageModel
+ 
+     public void OnGet()
+     {
+-        Message = "This is the initial logic.";
++        Message = "The code logic has been UPDATED by Hot Reload!";
+     }
+ }
+\ No newline at end of file
+-- 
+2.50.1
+

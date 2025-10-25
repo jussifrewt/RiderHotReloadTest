@@ -1,0 +1,25 @@
+From b070b82fc194b8f5b44c044674c60ea8025c615d Mon Sep 17 00:00:00 2001
+From: Natalia Baliakina <natalia.baliakina@fxbackoffice.com>
+Date: Sat, 25 Oct 2025 21:09:44 +0300
+Subject: [PATCH 5/5] test: Demonstrate DI Hot Reload
+
+---
+ MessageService.cs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MessageService.cs b/MessageService.cs
+index 920cde1..dfb2bd3 100644
+--- a/MessageService.cs
++++ b/MessageService.cs
+@@ -8,6 +8,6 @@ public class MessageService : IMessageService
+ {
+     public string GetMessage()
+     {
+-        return "This message comes from a separate service!";
++        return "Hot Reload works with dependencies! Hooray!";
+     }
+ }
+\ No newline at end of file
+-- 
+2.50.1
+

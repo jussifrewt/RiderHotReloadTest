@@ -1,0 +1,27 @@
+From a43746af45209c513227d7caf6f885f2c7c29360 Mon Sep 17 00:00:00 2001
+From: Natalia Baliakina <natalia.baliakina@fxbackoffice.com>
+Date: Sat, 25 Oct 2025 21:08:57 +0300
+Subject: [PATCH 4/5] test: Demonstrate async/await Hot Reload
+
+---
+ Pages/Advanced.cshtml.cs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Pages/Advanced.cshtml.cs b/Pages/Advanced.cshtml.cs
+index 603e0c6..8be6cda 100644
+--- a/Pages/Advanced.cshtml.cs
++++ b/Pages/Advanced.cshtml.cs
+@@ -20,8 +20,8 @@ public class AdvancedModel : PageModel
+         FilteredData = _sourceData.Where(f => f.StartsWith("B")).ToList();
+ 
+         // 2. Async/await Test
+-        await Task.Delay(50);
+-        AsyncMessage = "Async task finished!";
++        await Task.Delay(1000);
++        AsyncMessage = "This LONG async task has been reloaded!";
+         
+         // 3. Dependency Injection Test
+         ServiceMessage = _messageService.GetMessage();
+-- 
+2.50.1
+

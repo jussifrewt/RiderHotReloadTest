@@ -1,0 +1,39 @@
+From 6cff8fda95e35d3b9777ec1db318505ca9bb6462 Mon Sep 17 00:00:00 2001
+From: Natalia Baliakina <natalia.baliakina@fxbackoffice.com>
+Date: Sat, 25 Oct 2025 21:08:10 +0300
+Subject: [PATCH 3/5] test: Demonstrate LINQ Hot Reload
+
+---
+ Pages/Advanced.cshtml    | 2 +-
+ Pages/Advanced.cshtml.cs | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Pages/Advanced.cshtml b/Pages/Advanced.cshtml
+index 99d6f59..b4ecbd4 100644
+--- a/Pages/Advanced.cshtml
++++ b/Pages/Advanced.cshtml
+@@ -15,7 +15,7 @@
+ <hr />
+ 
+ <h3>LINQ Query Test</h3>
+-<p>The query filters countries starting with the letter 'A'.</p>
++<p>The query filters countries starting with the letter 'B'.</p>
+ <ul>
+     @foreach (var item in Model.FilteredData)
+     {
+diff --git a/Pages/Advanced.cshtml.cs b/Pages/Advanced.cshtml.cs
+index b74bab8..603e0c6 100644
+--- a/Pages/Advanced.cshtml.cs
++++ b/Pages/Advanced.cshtml.cs
+@@ -17,7 +17,7 @@ public class AdvancedModel : PageModel
+     public async Task OnGetAsync()
+     {
+         // 1. LINQ Test
+-        FilteredData = _sourceData.Where(f => f.StartsWith("A")).ToList();
++        FilteredData = _sourceData.Where(f => f.StartsWith("B")).ToList();
+ 
+         // 2. Async/await Test
+         await Task.Delay(50);
+-- 
+2.50.1
+
