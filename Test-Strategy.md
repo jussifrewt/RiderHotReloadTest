@@ -28,7 +28,7 @@ My goal is to validate that Hot Reload in Rider delivers on its core promise: ac
 
 ### Out of scope:
 *   Performance, stress, and load testing.
-*   Niche project types (e.g., F#, Blazor WASM) and complex language features not covered by the core scenarios.
+*   Niche project types (e.g., Blazor WASM) and complex language features not covered by the core scenarios.
 *   Exhaustive negative testing of every possible unsupported change. The focus is on the most common failure modes ("Rude Edits", build failures).
 
 ---
