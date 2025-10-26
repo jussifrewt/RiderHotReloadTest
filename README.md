@@ -1,4 +1,4 @@
-> **Note:** The Test Strategy for this project can be found in the [`Test Strategy.md`](Test Strategy.md) file. This document (`README.md`) only contains the practical instructions for running the demonstration patches.
+> **Note:** The Test Strategy for this project can be found in the [`TestStrategy.md`](Test Strategy.md) file. This document (`README.md`) only contains the practical instructions for running the demonstration patches.
 
 ---
 # Hot Reload Demonstration Project
