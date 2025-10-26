@@ -141,7 +141,7 @@ Hot Reload and Rider operate in a tight client-server loop. A failure at any han
 
 ---
 
-## 6. Automation vs. manual strategy
+## 6. Automation vs. Manual Strategy
 
 ### WHERE MANUAL/EXPLORATORY TESTING IS ESSENTIAL
 *   **Debugger scenarios:** Evaluating live debug state (locals, call stack, stepping) needs human judgment.
