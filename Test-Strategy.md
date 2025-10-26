@@ -56,11 +56,12 @@ My risk analysis is structured into three distinct categories: validating the co
 | **High** | **IDE Feedback Failure on Error:** An error (like a "Rude Edit") occurs, but the Rider UI provides no clear, actionable feedback. | Execute the "Rude Edit" and "Build Failure" scenarios from within Rider. **Expected:** Rider must display a clear notification or error popup explaining the problem. |
 
 ### Integration & Environment Scenarios
-*These tests verify how Hot Reload interacts with the debugger, file system, and different client devices.*
+*These tests verify how Hot Reload interacts with the debugger, file system, settings and client devices.*
 
 | Priority | Risk Description | Corresponding Test Scenario |
 |:---|:---|:---|
 | **Critical** | **Debugger Corruption:** Applying Hot Reload during a debug session corrupts the debugger state or crashes it. | While paused on a breakpoint, apply a patch (e.g., Patch 3) and then step through the code. **Expected:** The variable inspector shows the new, correct value, and debugging can continue. |
+| **High** | **IDE Settings Ignored or Cause Instability:** The toggles in Rider's settings (e.g., "Enable Hot Reload", "Hot Reload on Save") do not correctly control the feature or cause instability. | With the app running, verify Hot Reload works (banner appears). Go to Settings > Build, Execution, Deployment > Hot Reload and disable the "Enable Hot Reload" checkbox. Restart the application. Make a file change. **Expected:** The "Apply Changes" banner does not appear and Hot Reload is inactive. Re-enable the setting, restart the application, and verify that functionality is restored. |
 | **High** | **External File Changes:** Rider's file system watcher fails to detect changes made in an external editor. | With the app running from Rider, make a change to Index.cshtml in an external editor (e.g., VS Code). **Expected:** Rider's Apply Changes banner appears within a few seconds. |
 | **High** | **User Experience (UX) - State Loss:** The feature works but destroys the developer's working context (e.g., data entered in forms). | Perform the UI State Preservation Test on the Advanced page as described in the README. |
 | **Medium** | **Client-Side Compatibility:** A Hot Reload change on the server-side breaks rendering on specific client devices, especially mobile/tablet browsers. | After applying each patch, verify that the web application continues to render and function correctly on a **simulated tablet/mobile device** using browser developer tools. |
