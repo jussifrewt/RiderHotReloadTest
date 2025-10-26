@@ -1,3 +1,6 @@
+> **Note:** The Test Strategy for this project can be found in the [`Test-Strategy.md`](Test-Strategy.md) file. This document (`README.md`) only contains the practical instructions for running the demonstration patches.
+
+---
 # Hot Reload Demonstration Project
 
 This project is a testbed designed to demonstrate and validate the Hot Reload feature in Rider. It uses a series of Git patches to simulate a developer making various types of changes to a running application, from simple UI tweaks to modifications in dependent services.
