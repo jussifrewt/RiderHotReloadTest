@@ -72,9 +72,9 @@ My risk analysis is structured into three distinct categories: validating the co
 To effectively test this complex feature, I have structured my work into a clear, phased plan governed by a set of core principles.
 
 ### GUIDING PRINCIPLES
-1.  **Risk-First:** I will prioritize work strictly according to the risk matrix (Section 3). The highest-impact failures must be discovered first.
-2.  **Build Confidence in Layers:** I will start with the core technology (the .NET SDK) in isolation. Once the foundation is proven stable, I will incrementally add the complexity of the Rider integration and the debugger.
-3.  **Fail Fast:** I will tackle the "must-have negative scenarios" early. Finding a blocking issue like a crash on day one is a major success, as it saves time for the development team.
+*  **Risk-First:** I will prioritize work strictly according to the risk matrix (Section 3). The highest-impact failures must be discovered first.
+*  **Build Confidence in Layers:** I will start with the core technology (the .NET SDK) in isolation. Once the foundation is proven stable, I will incrementally add the complexity of the Rider integration and the debugger.
+  *  **Fail Fast:** I will tackle the "must-have negative scenarios" early. Finding a blocking issue like a crash on day one is a major success, as it saves time for the development team.
 
 ### PHASED EXECUTION
 
@@ -82,44 +82,45 @@ To effectively test this complex feature, I have structured my work into a clear
 
 *Prove the core Hot Reload in the .NET SDK works on macOS before bringing Rider into the picture.*
 *   **Actions:**
-    1.  Run all must-have negative scenarios (“rude edit”, “build failure”) using only the CLI (dotnet watch).
-    2.  If stable, run all positive patch tests (Patches 1–5).
-    3.  Log any SDK-level bugs immediately with minimal repros.
+1. Run all must-have negative scenarios (“rude edit”, “build failure”) using only the CLI (dotnet watch).
+2. If stable, run all positive patch tests (Patches 1–5).
+3. Log any SDK-level bugs immediately with minimal repros.
 
 **Phase 2: Rider integration and environment**
 
 *Validate Rider's integration points: file watcher and run config.*
 *   **Actions:**
-    1.  Launch from Rider in Run mode.
-    2.  Re-run a subset of patches (e.g., Basic UI, DI) and verify the Apply Changes banner.
-    3.  Execute External File Changes and VCS Interaction scenarios.
+1. Launch from Rider in Run mode.
+2. Re-run a subset of patches (e.g., Basic UI, DI) and verify the Apply Changes banner.
+3. Execute External File Changes and VCS Interaction scenarios.
 
 **Phase 3: Debugger**
 
-*Exercise the riskiest area: debugger + Hot Reload.*
+*Exercise the area: debugger + Hot Reload.*
 *   **Actions:**
-    1.  Launch from Rider in Debug mode.
-    2.  Systematically run all “Debugger Integration Risks” scenarios.
-    3.  Watch debugger state closely: locals, call stack, breakpoints, stepping behavior, overall stability.
+1. Launch from Rider in Debug mode.
+2. Systematically run all “Debugger Integration Risks” scenarios.
+3. Watch debugger state closely: locals, call stack, breakpoints, stepping behavior, overall stability.
 
 **Phase 4: Exploratory testing and documentation**
 
 *Find "unknown unknowns” and wrap up the deliverables.*
 *   **Actions:**
-    1.  Do targeted exploratory sessions (multiple rapid changes, mixed constructs, edge DI cases).
-    2.  Review and tighten all bug reports (clear STR, logs, env).
+1. Do targeted exploratory sessions (multiple rapid changes, mixed constructs, edge DI cases).
+2. Review and tighten all bug reports (clear STR, logs, env).
 
 ### ORGANIZATION AND DELIVERABLES
 
 *   **Tooling:**
-    *   **Version control:** Git for managing the sample project and patches.
-    *   **IDE:** JetBrains Rider (Stable + EAP for side-by-side comparison).
-    *   **Execution:** Terminal (dotnet watch) for the baseline; Rider's runner for integration/debug.
-    *   **Bug tracking:** YouTrack (or similar), with full repro steps, logs, and environment details.
+1. **Version control:** Git for managing the sample project and patches.
+2. **IDE:** JetBrains Rider (Stable + EAP for side-by-side comparison).
+3. **Execution:** Terminal (dotnet watch) for the baseline; Rider's runner for integration/debug.
+4. **Bug tracking:** YouTrack (or similar), with full repro steps, logs, and environment details.
+      
 *   **Artefacts and deliverables:**
-    1.  **GitHub sample project:** Reproducible testbed with patches and scripts.
-    2.  **Bug reports:** Clear, high-quality issues for everything we find.
-    3.  **Final Test Summary Report:** Summary page with overall quality, key findings, and remaining risks.
+1. **GitHub sample project:** Reproducible testbed with patches and scripts.
+2. **Bug reports:** Clear, high-quality issues for everything we find.
+3. **Final Test Summary Report:** Summary page with overall quality, key findings, and remaining risks.
 
 ---
 
