@@ -20,11 +20,15 @@ My goal is to validate that Hot Reload in Rider delivers on its core promise: ac
 *   **Primary platform:** ASP.NET Core web apps on MacOS.
 *   **Execution modes:** I'll test both Run and Debug modes.
 *   **Core functionality:** Checking that UI changes (Razor) and C# logic updates (including async/await and LINQ) are applied correctly.
-*   **Architecture:** Verifying updates in DI - changes to injected dependencies.
-*   **User experience:** Making sure client-side DOM state is preserved.
+*   **Architecture:** Verifying updates in injected dependencies (Dependency Injection).
+*   **User experience:**
+*   *   Making sure client-side DOM state is preserved.
+    *   Verifying correct functionality and rendering on simulated mobile/tablet devices.
 *   **IDE integration:**
-    *   Checking Rider's UI feedback (Apply Changes banner).
-    *   Ensuring Rider picks up and applies file changes made in external editors (e.g., VS Code).
+    *   Verifying Rider's UI feedback mechanisms (Apply Changes banner, error popups).
+    *   Validating the core IDE settings for enabling/disabling Hot Reload.
+    *   Ensuring Rider correctly detects file changes made in external editors.
+    *   Testing for conflicts with other core IDE features like the Profiler, VCS (Git), and Static Code Analysis.
 
 ### Out of scope:
 *   Performance, stress, and load testing.
@@ -34,8 +38,13 @@ My goal is to validate that Hot Reload in Rider delivers on its core promise: ac
 ---
 
 ## 3. Key Risks and Test Scenarios
+My risk analysis is structured into four distinct categories:
+*   **Core Functionality (The "Happy Path"):** Does the feature work as advertised?
+*   **Stability & Error Handling (Graceful Failure):** How does the feature behave when things go wrong?
+*   **Integration & Environment:** How does it interact with the debugger, file system, and user's context?
+*   **Advanced IDE Integration:** How does it coexist with other complex Rider features like profiling and VCS?
 
-My risk analysis is structured into three distinct categories: validating the core "happy path," rigorously testing stability under error conditions, and verifying integration with the development environment. Each scenario is designed to answer a specific, critical question about the feature's reliability.
+Each scenario is designed to answer a specific question about the feature's reliability.
 
 ### Core Functionality Scenarios (The "Happy Path")
 *These tests validate that the feature works as advertised in the most common scenarios.*
@@ -77,66 +86,8 @@ My risk analysis is structured into three distinct categories: validating the co
 | **Low**    | **NuGet Restore Conflict:** A NuGet package update performed while the application is running leads to an inconsistent state.                                                               | With the app running, use Rider's NuGet tool to update a package. **Expected:** dotnet watch / Rider should detect the project file change and correctly suggest a manual restart.                                                                                                                                                                                                                                                                                                                                                                                                     |
 ---
 
-## 4. Work Organization and Execution Strategy
-
-To effectively test this complex feature, I have structured my work into a clear, phased plan governed by a set of core principles.
-
-### GUIDING PRINCIPLES
-*  **Risk-First:** I will prioritize work strictly according to the risk matrix (Section 3). The highest-impact failures must be discovered first.
-*  **Build Confidence in Layers:** I will start with the core technology (the .NET SDK) in isolation. Once the foundation is proven stable, I will incrementally add the complexity of the Rider integration and the debugger.
-  *  **Fail Fast:** I will tackle the "must-have negative scenarios" early. Finding a blocking issue like a crash on day one is a major success, as it saves time for the development team.
-
-### PHASED EXECUTION
-
-**Phase 1: Foundation and stability baseline**
-
-*Prove the core Hot Reload in the .NET SDK works on macOS before bringing Rider into the picture.*
-*   **Actions:**
-1. Run all must-have negative scenarios (“rude edit”, “build failure”) using only the CLI (dotnet watch).
-2. If stable, run all positive patch tests (Patches 1–5).
-3. Log any SDK-level bugs immediately with minimal repros.
-
-**Phase 2: Rider integration and environment**
-
-*Validate Rider's integration points: file watcher and run config.*
-*   **Actions:**
-1. Launch from Rider in Run mode.
-2. Re-run a subset of patches (e.g., Basic UI, DI) and verify the Apply Changes banner.
-3. Execute External File Changes and VCS Interaction scenarios.
-
-**Phase 3: Debugger**
-
-*Exercise the area: debugger + Hot Reload.*
-*   **Actions:**
-1. Launch from Rider in Debug mode.
-2. Systematically run all “Debugger Integration Risks” scenarios.
-3. Watch debugger state closely: locals, call stack, breakpoints, stepping behavior, overall stability.
-
-**Phase 4: Exploratory testing and documentation**
-
-*Find "unknown unknowns” and wrap up the deliverables.*
-*   **Actions:**
-1. Do targeted exploratory sessions (multiple rapid changes, mixed constructs, edge DI cases).
-2. Review and tighten all bug reports (clear STR, logs, env).
-
-### ORGANIZATION AND DELIVERABLES
-
-*   **Tooling:**
-1. **Version control:** Git for managing the sample project and patches.
-2. **IDE:** JetBrains Rider (Stable + EAP for side-by-side comparison).
-3. **Execution:** Terminal (dotnet watch) for the baseline; Rider's runner for integration/debug.
-4. **Bug tracking:** YouTrack (or similar), with full repro steps, logs, and environment details.
-      
-*   **Artefacts and deliverables:**
-1. **GitHub sample project:** Reproducible testbed with patches and scripts.
-2. **Bug reports:** Clear, high-quality issues for everything we find.
-3. **Final Test Summary Report:** Summary page with overall quality, key findings, and remaining risks.
-
----
-
-## 5. Dependency Analysis
-
-Hot Reload and Rider operate in a tight client-server loop. A failure at any handoff point can break the entire feature. This analysis identifies the most critical dependencies.
+## 4. System Analysis & Dependencies
+Before creating an execution plan, it's crucial to analyze the system to understand its architecture and identify critical points of failure. Hot Reload and Rider operate in a tight client-server loop. A failure at any handoff point can break the entire feature. This analysis identifies the most critical dependencies.
 
 ### HOW HOT RELOAD AND THE APP DEPEND ON RIDER
 1.  **Launch configuration (top priority):** Rider has to read `launchSettings.json` and build the correct `dotnet` command.
@@ -149,6 +100,69 @@ Hot Reload and Rider operate in a tight client-server loop. A failure at any han
 1.  **Feedback protocol (top priority):** `dotnet watch` reports its state ("changes applied," "rude edit," etc.). Rider's UI depends on parsing this output correctly.
     *   **Why it's critical:** This is the core of the user experience. If the UI lies, the user loses trust in the tool.
 2.  **Process lifecycle:** Rider must correctly start, stop, and restart the `dotnet watch` process.
+
+---
+
+## 5. Work Organization & Execution Strategy
+Based on the **System Analysis** (Section 4) and the **Key Risks** (Section 3), I have structured the testing effort into a phased plan governed by a set of core principles.
+
+### GUIDING PRINCIPLES
+*  **Risk-First:** I will prioritize work strictly according to the risk matrix (Section 3). The highest-impact failures must be discovered first.
+*  **Build Confidence in Layers:** I will start with the core technology (the .NET SDK) in isolation. Once the foundation is proven stable, I will incrementally add the complexity of the Rider integration and the debugger.
+  *  **Fail Fast:** I will take the "must-have negative scenarios" early. Finding a blocking issue like a crash on day one is a major success, as it saves time for the development team.
+
+### PHASED EXECUTION
+
+**Phase 1: Foundation and stability baseline**
+
+*Verify that the core .NET SDK Hot Reload mechanism is stable and functional before involving the IDE.*
+*   **Actions:**
+1. Execute all Stability & Error Handling Scenarios ("Rude Edit", "Build Failure") using only the CLI (dotnet watch).
+2. If stable, run all Core Functionality patch tests (Patches 1–5).
+
+**Phase 2: Rider integration and environment**
+
+*Test Rider's primary integration points and environmental interactions.*
+*   **Actions:**
+1. Launch from Rider in Run mode.
+2. Repeat a subset of patch tests to validate the Apply Changes banner.
+3. Execute all scenarios from the "Integration & Environment Scenarios" table, including:
+   *   External File Changes test.
+   *   UI State Preservation test.
+   *   Client-Side Compatibility check.
+4. Execute the IDE Settings test (enabling/disabling Hot Reload).
+
+**Phase 3: Rider Advanced Integration & Debugger**
+
+*Exercise the most complex integration points: the debugger and other advanced IDE features.*
+*   **Actions:**
+1. Launch from Rider in Debug Mode and systematically run all "Debugger Integration Risks" scenarios.
+2. Execute all scenarios from the "Advanced IDE Integration Scenarios" table:
+   *   Profiling Conflict test.
+   *   VCS (Git) Conflict test.
+   *   Static Analysis Desync test.
+   *   NuGet Restore Conflict test.
+3. Watch the debugger state and overall IDE stability closely.
+
+**Phase 4: Exploratory testing and Documentation**
+
+*Find "unknown unknowns”.*
+*   **Actions:**
+1. Conduct targeted exploratory sessions based on the most complex areas (e.g., rapid changes during a debug or profile session).
+
+### ORGANIZATION AND DELIVERABLES
+This section outlines the final artifacts that would be produced at the end of testing effort. While not all of these are created for this specific assignment (e.g., actual bug reports), they represent the complete set of deliverables for a real-world testing task.
+
+*   **Tools**
+1. **Version control:** Git for managing the sample project and patches.
+2. **IDE:** JetBrains Rider (Stable + EAP for side-by-side comparison).
+3. **Execution:** Terminal (dotnet watch) for the baseline; Rider's runner for integration/debug.
+      
+*   **Artefacts and deliverables:**
+1. **GitHub sample project:** Reproducible testbed with patches and scripts.
+2. **This Test Strategy Document:** The plan guiding testing process.
+3. **A set of high-quality Bug Reports:** For any discovered issue, a clear report would be created in a tool like YouTrack, including precise steps to reproduce, logs, and environment details.
+4. **Final Test Summary Report:** Summary page with overall quality, key findings, and remaining risks.
 
 ---
 
