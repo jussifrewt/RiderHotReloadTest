@@ -81,7 +81,7 @@ Each scenario is designed to answer a specific question about the feature's reli
 
 | Priority   | Risk Description                                                                                                                           | Corresponding Test Scenario                                                                                                                                                                                                                                                   |
 |:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **High**   | **Profiling Conflict:** Applying Hot Reload while a profiling session is active causes the application, the profiler, or the IDE to crash. | Launch the application with the profiler attached. While profiling, apply a patch. **Expected:** The application and profiler **do not crash**. A graceful error is reported at minimum.                                                                                      |
+| **High**   | **Profiling Conflict:** Applying Hot Reload while a profiling session is active causes the application, the profiler, or the IDE to crash. | Launch the application with the profiler attached. While profiling, apply a patch. **Expected:** The application and profiler **do not crash**. A correct error is reported.                                                                                      |
 | **Medium** | **VCS (Git) Conflict:** A mass file change from a Git operation is not handled correctly by the file watcher.                              | With the app running, use Rider's UI to Stash several uncommitted changes. **Expected:** Hot Reload triggers and reverts the application to the `HEAD` state. Use Rider's UI to Unstash the changes. **Expected:** Hot Reload triggers again and applies the stashed changes. |
 | **Medium** | **Static Analysis Desync:** Rider's code analyzer gets out of sync with the running application after a Hot Reload.                        | Introduce a code warning and apply Hot Reload. Verify the "Problems" view shows the warning. Fix the code and apply Hot Reload. **Expected:** The warning **disappears** from the "Problems" view without a manual refresh.                                                   |
 | **Low**    | **NuGet Restore Conflict:** A NuGet package update performed while the application is running leads to an inconsistent state.              | With the app running, use Rider's NuGet tool to update a package. **Expected:** dotnet watch / Rider should detect the project file change and correctly suggest a **manual restart**.                                                                                        |
@@ -102,7 +102,7 @@ Before creating an execution plan, I analyzed the system to understand its archi
 
 ### HOW RIDER DEPENDS ON THE .NET WATCHER PROCESS
 1.  **Feedback protocol (top priority):** `dotnet watch` reports its state ("changes applied," "errors," etc.). Rider's UI is entirely dependent on correctly parsing this output.
-    *   **Why it's critical:** This is the core of the user experience. If the UI lies or is silent about an error, the developer is left confused and frustrated, leading them to abandon the feature.
+    *   **Why it's critical:** This is the core of the user experience. If the UI lies or is silent about an error, the developer is left confused.
 2.  **Process lifecycle:** Rider must correctly start, stop, and manage the lifecycle of the `dotnet watch` process.
     *   **Why it's critical:** A failure here can lead to "zombie" processes consuming system resources or requiring a manual restart of the IDE, disrupting the development flow.
 
@@ -169,5 +169,5 @@ This section outlines the final artifacts that would be produced at the end of t
 *   **Negative paths:** Graceful failure and error messaging need human interpretation.
 
 ### WHERE AUTOMATION ADDS REAL VALUE
-*   **Core SDK Smoke Test:** A small, non-visual Web API test is the ideal candidate. Its purpose is to act as a **regression guard** for the core Hot Reload engine, completely independent of the Rider UI.
+*   **Core SDK Smoke Test:** A small, non-visual Web API test is the ideal candidate. Its purpose is to act as a **regression suite** for the core Hot Reload engine, completely independent of the Rider UI.
     *   **CI/CD Integration:** This test might be added to the CI/CD pipeline and parameterized to run on all target operating systems (e.g., Windows Server, macOS) for every new build of the .NET SDK. This will catch major cross-platform regressions early and automatically.
