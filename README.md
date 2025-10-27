@@ -84,3 +84,30 @@ To revert the project to its initial state after applying the patches, run:
 ```bash
 git reset --hard
 ```
+---
+
+### Negative Scenarios (Graceful Failure)
+
+These manual tests are designed to verify that the application and tooling remain stable and provide clear feedback when errors occur.
+
+**Test 1: "API Change" Handling**
+1.  With the application running, open the `MessageService.cs` file.
+2.  Modify the signature of the `GetMessage()` method (e.g., add a parameter: `public string GetMessage(int id)`).
+3. **Observe the `dotnet watch` terminal:**
+    *   **Expected:** The terminal should report a problem and a restart is required. The application itself **should not crash**.
+    *   `watch : error ENC0009: Updating the type of method requires restarting the application.`
+4. **Observe the Rider app:**
+    *   **Expected:** The Rider should report "MessageService.cs(4, 23): [ENC0009]" and a restart is required. The application itself **should not crash**.
+    *   Hot Reload is not applied.
+
+**Test 2: Build Failure Handling**
+1.  Revert the "API Change" from the previous step.
+2.  Now, introduce a syntax error in the same file (e.g., delete the semicolon at the end of the `return` statement).
+3. **Observe the `dotnet watch` terminal:**
+    *   **Expected:** The terminal should report a compilation error. The application itself **should not crash**.
+    *   `... error CS1002: ; expected`
+4. Fix the syntax error and save the file again.
+5. **Expected:** Hot Reload should now apply the changes successfully.
+6. **Observe the Rider app:**
+    *   **Expected:** The Rider should report a compilation error. The application itself **should not crash**.
+    *   `MessageService.cs(11, 61): [CS1002] ; expected`
