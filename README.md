@@ -106,8 +106,8 @@ These manual tests are designed to verify that the application and tooling remai
 3. **Observe the `dotnet watch` terminal:**
     *   **Expected:** The terminal should report a compilation error. The application itself **should not crash**.
     *   `... error CS1002: ; expected`
-4. Fix the syntax error and save the file again.
-5. **Expected:** Hot Reload should now apply the changes successfully.
-6. **Observe the Rider app:**
+4. **Observe the Rider app:**
     *   **Expected:** The Rider should report a compilation error. The application itself **should not crash**.
     *   `MessageService.cs(11, 61): [CS1002] ; expected`
+5. Fix the syntax error.
+6. **Expected:** Hot Reload should now apply the changes successfully.
